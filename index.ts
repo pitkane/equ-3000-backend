@@ -4,6 +4,7 @@ const host = "localhost";
 const port = 8080;
 
 /** App */
+
 const server: Hapi.Server = new Hapi.Server({ host, port });
 
 /** Routes */
