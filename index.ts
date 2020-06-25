@@ -1,6 +1,6 @@
 import * as Hapi from "@hapi/hapi";
 
-const host = "localhost";
+const host = "0.0.0.0";
 const port = 8080;
 
 /** App */
