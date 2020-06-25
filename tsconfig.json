@@ -1,10 +1,29 @@
 {
   "compilerOptions": {
-    "outDir": "./build",
-    "lib": ["es5", "es6"],
+    "target": "es2017",
     "module": "commonjs",
-    "target": "es6",
-    "sourceMap": true
+    "moduleResolution": "node",
+    "lib": ["es2016", "esnext.asynciterable"],
+    "baseUrl": "src",
+    "paths": {
+      "utils/*": ["utils/*"],
+      "controllers": ["src/controllers/*"]
+    },
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "pretty": true,
+    "outDir": "build"
+    // "typeRoots": ["./node_modules/@types", "./src/typings"]
   },
-  "exclude": ["node_modules"]
+  "include": ["src/**/*", "test/**/*", "src/typings/**/*", "test"],
+  "exclude": ["node_modules", "test"]
 }

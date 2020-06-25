@@ -1,12 +1,14 @@
-import * as Hapi from "@hapi/hapi";
-import * as Inert from "@hapi/inert";
-import * as Vision from "@hapi/vision";
-import * as HapiSwagger from "hapi-swagger";
-import * as Joi from "@hapi/joi";
-import * as _ from "lodash";
+import Hapi from "@hapi/hapi";
+import Inert from "@hapi/inert";
+import Vision from "@hapi/vision";
+import HapiSwagger from "hapi-swagger";
+import Joi from "@hapi/joi";
+import _ from "lodash";
 
 import * as Types from "./types";
 import { equipmentList } from "./controllers/equipment-list";
+import { equipmentGet } from "./controllers/equipment-get";
+import { equipmentCreate } from "./controllers/equipment-create";
 
 const host = "0.0.0.0";
 const port = 8080;
@@ -17,10 +19,6 @@ export const createServer = async (): Promise<Hapi.Server> => {
   const serverOptions = {
     host,
     port,
-  };
-
-  const swaggerOptions = {
-    grouping: "tags",
   };
 
   const server: Hapi.Server = new Hapi.Server(serverOptions);
@@ -36,7 +34,7 @@ export const createServer = async (): Promise<Hapi.Server> => {
     method: "GET",
     path: "/api/equipment/search",
     handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      const payload: Types.GetEquipmentListRequest = {
+      const payload: Types.EquipmentListPayload = {
         limit: _.toNumber(request.query.limit),
       };
       return equipmentList(payload);
@@ -53,7 +51,48 @@ export const createServer = async (): Promise<Hapi.Server> => {
     },
   });
 
+  server.route({
+    method: "GET",
+    path: "/api/equipment/{equipmentNumber}",
+    handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+      const payload: Types.EquipmentGetPayload = {
+        equipmentNumber: request.params.equipmentNumber,
+      };
+      return equipmentGet(payload);
+    },
+    options: {
+      id: "equipmentGet",
+      description: "equipmentGet",
+      tags: ["equipment"],
+      validate: {
+        params: Joi.object({
+          equipmentNumber: Joi.string().required(),
+        }),
+      },
+    },
+  });
+
+  server.route({
+    method: "POST",
+    path: "/api/equipment",
+    handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+      return equipmentCreate(request.payload as Types.EquipmentDTO);
+    },
+    options: {
+      id: "equipmentCreate",
+      description: "equipmentCreate",
+      tags: ["equipment"],
+      validate: {
+        payload: Joi.object({
+          equipmentNumber: Joi.string().required(),
+          address: Joi.string().required(),
+          contractStartDate: Joi.string().required(),
+          contractEndDate: Joi.string().required(),
+          status: Joi.string().valid("RUNNING", "STOPPED").required(),
+        }),
+      },
+    },
+  });
+
   return server;
 };
-
-const start = async () => {};
