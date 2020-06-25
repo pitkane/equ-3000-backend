@@ -7,7 +7,6 @@ import * as Types from "../types";
 export const equipmentGet = async (
   payload: Types.EquipmentGetPayload
 ): Promise<Types.EquipmentDTO> => {
-  const equipment = cos;
   return {
     equipmentNumber: uuidv4(),
     address: "asdfasdf asdf",
