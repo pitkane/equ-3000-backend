@@ -1,20 +1,14 @@
-import { v4 as uuidv4 } from "uuid";
+import Boom from "@hapi/boom";
 import moment from "moment";
 
+import { createOne } from "../cosmos-client";
 import * as Types from "../types";
 
 export const equipmentCreate = async (
   payload: Types.EquipmentDTO
-): Promise<Types.EquipmentDTO> => {
-  const moro = "asdf";
+): Promise<Types.EquipmentDTO | Boom.Boom> => {
+  const result = await createOne(payload);
 
-  return {
-    equipmentNumber: uuidv4(),
-    address: "asdfasdf asdf",
-    contractStartDate: moment().format(),
-    contractEndDate: moment().format(),
-    status: "RUNNING",
-  };
+  if (result === true) return payload;
+  else return Boom.internal("Failed to create object");
 };
-
-// duplicate nononon

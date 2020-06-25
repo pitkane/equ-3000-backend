@@ -1,17 +1,14 @@
-import { v4 as uuidv4 } from "uuid";
-import moment from "moment";
+import Boom from "@hapi/boom";
 
 import { findOne } from "../cosmos-client";
 import * as Types from "../types";
 
 export const equipmentGet = async (
   payload: Types.EquipmentGetPayload
-): Promise<Types.EquipmentDTO> => {
-  return {
-    equipmentNumber: uuidv4(),
-    address: "asdfasdf asdf",
-    contractStartDate: moment().format(),
-    contractEndDate: moment().format(),
-    status: "RUNNING",
-  };
+): Promise<Types.EquipmentDTO | Boom.Boom> => {
+  const result = await findOne(payload.equipmentNumber);
+
+  if (result === null) return Boom.notFound();
+
+  return result;
 };
