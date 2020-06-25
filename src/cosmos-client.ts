@@ -70,11 +70,11 @@ export const findOne = async (
   }
 };
 
-export const findAll = async (): Promise<Types.EquipmentDTO[]> => {
+export const findAll = async (limit: number): Promise<Types.EquipmentDTO[]> => {
   try {
     const collection = await getCollection();
 
-    let result = collection.find<Types.EquipmentDTO>();
+    let result = collection.find<Types.EquipmentDTO>().limit(limit);
 
     console.log(result);
 
@@ -83,5 +83,24 @@ export const findAll = async (): Promise<Types.EquipmentDTO[]> => {
   } catch (err) {
     console.log(err);
     return [];
+  }
+};
+
+export const deleteAll = async () => {
+  try {
+    const collection = await getCollection();
+
+    const findAll = await collection.find<Types.EquipmentDTO>().toArray();
+
+    for (const iterator of findAll) {
+      await collection.remove({ equipmentNumber: iterator.equipmentNumber });
+    }
+
+    // findAll.toArray().map((document) => {});
+
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
   }
 };

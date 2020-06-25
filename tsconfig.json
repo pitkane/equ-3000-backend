@@ -4,11 +4,6 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "lib": ["es2016", "esnext.asynciterable"],
-    "baseUrl": "src",
-    "paths": {
-      "utils/*": ["utils/*"],
-      "controllers": ["src/controllers/*"]
-    },
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
@@ -22,8 +17,5 @@
     "sourceMap": true,
     "pretty": true,
     "outDir": "build"
-    // "typeRoots": ["./node_modules/@types", "./src/typings"]
-  },
-  "include": ["src/**/*", "test/**/*", "src/typings/**/*", "test"],
-  "exclude": ["node_modules", "test"]
+  }
 }

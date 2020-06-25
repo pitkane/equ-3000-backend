@@ -9,16 +9,28 @@ import * as Types from "./types";
 import { equipmentList } from "./controllers/equipment-list";
 import { equipmentGet } from "./controllers/equipment-get";
 import { equipmentCreate } from "./controllers/equipment-create";
+import { equipmentDeleteAll } from "./controllers/equipment-delete-all";
 
 const host = "0.0.0.0";
-const port = 8080;
-
-/** App */
+const port = 8081;
 
 export const createServer = async (): Promise<Hapi.Server> => {
   const serverOptions = {
     host,
     port,
+    routes: {
+      cors: {
+        origin: ["*"], // allow all, for now
+      },
+    },
+  };
+
+  const swaggerOptions = {
+    grouping: "tags",
+    info: {
+      title: "equ-3000-api",
+    },
+    schemes: ["http"],
   };
 
   const server: Hapi.Server = new Hapi.Server(serverOptions);
@@ -26,9 +38,10 @@ export const createServer = async (): Promise<Hapi.Server> => {
   await server.register(Vision as any);
   await server.register({
     plugin: HapiSwagger,
+    options: swaggerOptions,
   });
 
-  // ROUTES
+  // ADD ROUTES
 
   server.route({
     method: "GET",
@@ -42,7 +55,7 @@ export const createServer = async (): Promise<Hapi.Server> => {
     options: {
       id: "equipmentList",
       description: "equipmentList",
-      tags: ["equipment"],
+      tags: ["api"],
       validate: {
         query: Joi.object({
           limit: Joi.number().required(),
@@ -63,7 +76,7 @@ export const createServer = async (): Promise<Hapi.Server> => {
     options: {
       id: "equipmentGet",
       description: "equipmentGet",
-      tags: ["equipment"],
+      tags: ["api"],
       validate: {
         params: Joi.object({
           equipmentNumber: Joi.string().required(),
@@ -81,7 +94,7 @@ export const createServer = async (): Promise<Hapi.Server> => {
     options: {
       id: "equipmentCreate",
       description: "equipmentCreate",
-      tags: ["equipment"],
+      tags: ["api"],
       validate: {
         payload: Joi.object({
           equipmentNumber: Joi.string().required(),
@@ -89,8 +102,21 @@ export const createServer = async (): Promise<Hapi.Server> => {
           contractStartDate: Joi.string().required(),
           contractEndDate: Joi.string().required(),
           status: Joi.string().valid("RUNNING", "STOPPED").required(),
-        }),
+        }).label("EquipmentDTO"),
       },
+    },
+  });
+
+  server.route({
+    method: "DELETE",
+    path: "/api/equipment",
+    handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+      return equipmentDeleteAll();
+    },
+    options: {
+      id: "equipmentDeleteAll",
+      description: "equipmentDeleteAll",
+      tags: ["api"],
     },
   });
 

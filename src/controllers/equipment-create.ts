@@ -1,5 +1,4 @@
 import Boom from "@hapi/boom";
-import moment from "moment";
 
 import { createOne } from "../cosmos-client";
 import * as Types from "../types";

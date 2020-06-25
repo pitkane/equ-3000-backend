@@ -13,21 +13,34 @@ const lodash_1 = __importDefault(require("lodash"));
 const equipment_list_1 = require("./controllers/equipment-list");
 const equipment_get_1 = require("./controllers/equipment-get");
 const equipment_create_1 = require("./controllers/equipment-create");
+const equipment_delete_all_1 = require("./controllers/equipment-delete-all");
 const host = "0.0.0.0";
 const port = 8081;
-/** App */
 exports.createServer = async () => {
     const serverOptions = {
         host,
         port,
+        routes: {
+            cors: {
+                origin: ["*"],
+            },
+        },
+    };
+    const swaggerOptions = {
+        grouping: "tags",
+        info: {
+            title: "equ-3000-api",
+        },
+        schemes: ["http"],
     };
     const server = new hapi_1.default.Server(serverOptions);
     await server.register(inert_1.default);
     await server.register(vision_1.default);
     await server.register({
         plugin: hapi_swagger_1.default,
+        options: swaggerOptions,
     });
-    // ROUTES
+    // ADD ROUTES
     server.route({
         method: "GET",
         path: "/api/equipment/search",
@@ -40,7 +53,7 @@ exports.createServer = async () => {
         options: {
             id: "equipmentList",
             description: "equipmentList",
-            tags: ["equipment"],
+            tags: ["api"],
             validate: {
                 query: joi_1.default.object({
                     limit: joi_1.default.number().required(),
@@ -60,7 +73,7 @@ exports.createServer = async () => {
         options: {
             id: "equipmentGet",
             description: "equipmentGet",
-            tags: ["equipment"],
+            tags: ["api"],
             validate: {
                 params: joi_1.default.object({
                     equipmentNumber: joi_1.default.string().required(),
@@ -77,7 +90,7 @@ exports.createServer = async () => {
         options: {
             id: "equipmentCreate",
             description: "equipmentCreate",
-            tags: ["equipment"],
+            tags: ["api"],
             validate: {
                 payload: joi_1.default.object({
                     equipmentNumber: joi_1.default.string().required(),
@@ -85,8 +98,20 @@ exports.createServer = async () => {
                     contractStartDate: joi_1.default.string().required(),
                     contractEndDate: joi_1.default.string().required(),
                     status: joi_1.default.string().valid("RUNNING", "STOPPED").required(),
-                }),
+                }).label("EquipmentDTO"),
             },
+        },
+    });
+    server.route({
+        method: "DELETE",
+        path: "/api/equipment",
+        handler: (request, h) => {
+            return equipment_delete_all_1.equipmentDeleteAll();
+        },
+        options: {
+            id: "equipmentDeleteAll",
+            description: "equipmentDeleteAll",
+            tags: ["api"],
         },
     });
     return server;

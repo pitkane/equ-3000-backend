@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findAll = exports.findOne = exports.createOne = void 0;
+exports.deleteAll = exports.findAll = exports.findOne = exports.createOne = void 0;
 const mongodb_1 = require("mongodb");
 const cosmosUrl = "mongodb://equ-3000-cosmos-db:oTenIlhaPqgFkrjzVhDeuag5SWOaOle1lfdqsXK2n7laYGnTQpuFX4bUbgwd5moSrd5lqZKioryy4uPal8HzdQ%3D%3D@equ-3000-cosmos-db.documents.azure.com:10255/?ssl=true";
 const returnFields = [
@@ -66,6 +66,21 @@ exports.findAll = async (limit) => {
     catch (err) {
         console.log(err);
         return [];
+    }
+};
+exports.deleteAll = async () => {
+    try {
+        const collection = await getCollection();
+        const findAll = await collection.find().toArray();
+        for (const iterator of findAll) {
+            await collection.remove({ equipmentNumber: iterator.equipmentNumber });
+        }
+        // findAll.toArray().map((document) => {});
+        return true;
+    }
+    catch (err) {
+        console.log(err);
+        return false;
     }
 };
 //# sourceMappingURL=cosmos-client.js.map

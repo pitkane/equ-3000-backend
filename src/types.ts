@@ -1,5 +1,5 @@
 export interface EquipmentListPayload {
-  limit?: number;
+  limit: number;
 }
 
 export interface EquipmentGetPayload {
