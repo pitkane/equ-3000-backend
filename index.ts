@@ -9,7 +9,7 @@ const run = async (): Promise<void> => {
     console.log(err);
     process.exit(1);
   }
-  console.log(`Server running @ ${server.info.uri}`);
+  console.log(`Server running PLEASE @ ${server.info.uri}`);
 };
 
 run();
