@@ -1,34 +1,8 @@
-import * as Hapi from "@hapi/hapi";
+import { createServer } from "./src/server";
 
-const host = "0.0.0.0";
-const port = 8080;
+const run = async (): Promise<void> => {
+  const server = await createServer();
 
-/** App */
-
-const server: Hapi.Server = new Hapi.Server({ host, port });
-
-/** Routes */
-
-server.route({
-  method: "GET",
-  path: "/",
-  handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) =>
-    "This is the GET route.",
-});
-
-server.route({
-  method: "POST",
-  path: "/",
-  handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-    return {
-      message:
-        "This is the POST route, the data you sent is attached to this response",
-      data: request.payload,
-    };
-  },
-});
-
-async function start() {
   try {
     await server.start();
   } catch (err) {
@@ -36,6 +10,6 @@ async function start() {
     process.exit(1);
   }
   console.log(`Server running @ ${server.info.uri}`);
-}
+};
 
-start();
+run();
