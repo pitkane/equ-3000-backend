@@ -51,7 +51,7 @@ Request payload validation is done with the Joi library
 
 API documentation with swagger: <http://equ-3000-api.eba-k3g67aim.eu-west-1.elasticbeanstalk.com/documentation>
 
-Server can be also manually tested via the Swagger documentation.
+The server can be also manually tested via the Swagger documentation.
 
 ### CosmosDB
 
@@ -82,7 +82,7 @@ Before EB I tried Azure App Service. At first, everything was running smoothly a
 
 ### Frontend
 
-Frontend is simply deployed to a AWS S3 Bucket as a static site hosting configuration, which is serving production bundle of the React application. Nothing special about that. Deployments are done manually via `aws s3 sync`.
+Frontend is simply deployed to an AWS S3 Bucket as a static site hosting configuration, which is serving production bundle of the React application. Nothing special about that. Deployments are done manually via `aws s3 sync`.
 
 Before S3 static site hosting option, I First deployed the frontend bundle into AWS Amplify because I wanted to test Amplify. The deployment process was smooth and I was up and running with the application in minutes.
 
